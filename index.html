@@ -114,14 +114,51 @@
 
     .top-section {
       padding: 10px 4px;
-  }
+    }
 
+    /* Modal CSS */
+    #passwordModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    #passwordModal .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      max-width: 300px;
+    }
+
+    #passwordModal input {
+      padding: 8px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    #passwordModal .modal-buttons {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    #passwordError {
+      color: red;
+      margin-top: 10px;
+      display: none;
+    }
   </style>
 </head>
 <body>
   <div class="fixed-header">Hãy Chọn Đúng Mục Cần Chéo</div>
 
-  <!-- Top Section: 3 hàng dọc - mỗi hàng 1 mục -->
   <div class="top-section">
     <div class="section">
       <div class="section-title" onclick="toggleSection('linkCoc')">
@@ -145,6 +182,19 @@
     </div>
   </div>
 
+  <!-- Modal Nhập Mật Khẩu -->
+  <div id="passwordModal">
+    <div class="modal-content">
+      <p>Bạn không có quyền truy cập tính năng này<br>Nhập mật khẩu để tiếp tục:</p>
+      <input type="password" id="passwordInput" placeholder="Nhập mật khẩu..." />
+      <div class="modal-buttons">
+        <button id="passwordCancel">Hủy</button>
+        <button id="passwordConfirm" disabled>OK</button>
+      </div>
+      <p id="passwordError">Sai mật khẩu!</p>
+    </div>
+  </div>
+
   <script>
     const linkCoc = [
       { url: "https://lite.tiktok.com/t/ZSh9vYu8c/", label: "Máy 16PRM", protected: true },
@@ -163,7 +213,6 @@
       { url: "https://example.com/mochi1", label: "Máy XS", protected: true  },
       { url: "https://example.com/mochi2", label: "Máy 16PRM", protected: true  }
     ];
-
 
     const clickedLinks = JSON.parse(localStorage.getItem('clickedLinks') || '{}');
     const lastUpdated = localStorage.getItem('lastUpdated');
@@ -189,23 +238,26 @@
       }
 
       btn.onclick = () => {
-        if (isProtected) {
-          const pass = prompt("Bạn không có quyền truy cập tính năng này\nNhập Mật Khẩu để tiếp tục:");
-          if (pass !== "8322") {
-            alert("Sai mật khẩu!");
-            return;
+        const proceed = () => {
+          window.open(link, '_blank');
+          clickedLinks[key] = today;
+          clickedLinks[key + '_count'] = clickCount + 1;
+          localStorage.setItem('clickedLinks', JSON.stringify(clickedLinks));
+          if (!allowMultiple) {
+            btn.textContent = `Đã bấm (${clickedLinks[key + '_count']} lượt)`;
+            btn.classList.add('clicked');
+            btn.disabled = true;
+          } else {
+            btn.textContent = `${label} (${clickedLinks[key + '_count']} lượt)`;
           }
-        }
-        window.open(link, '_blank');
-        clickedLinks[key] = today;
-        clickedLinks[key + '_count'] = clickCount + 1;
-        localStorage.setItem('clickedLinks', JSON.stringify(clickedLinks));
-        if (!allowMultiple) {
-          btn.textContent = `Đã bấm (${clickedLinks[key + '_count']} lượt)`;
-          btn.classList.add('clicked');
-          btn.disabled = true;
+        };
+
+        if (isProtected) {
+          askPassword(granted => {
+            if (granted) proceed();
+          });
         } else {
-          btn.textContent = `${label} (${clickedLinks[key + '_count']} lượt)`;
+          proceed();
         }
       };
 
@@ -236,6 +288,43 @@
     renderLinks('linkCoc', linkCoc, 'coc', 'Cóc', true);
     renderLinks('linkTuyet', linkTuyet, 'tuyet', 'Tuyết', true);
     renderLinks('linkMochi', linkMochi, 'mochi', 'Mochi', true);
+
+    // Modal xử lý
+    let currentCallback = null;
+    const modal = document.getElementById('passwordModal');
+    const input = document.getElementById('passwordInput');
+    const cancel = document.getElementById('passwordCancel');
+    const confirm = document.getElementById('passwordConfirm');
+    const error = document.getElementById('passwordError');
+
+    function askPassword(callback) {
+      currentCallback = callback;
+      input.value = '';
+      confirm.disabled = true;
+      error.style.display = 'none';
+      modal.style.display = 'flex';
+      input.focus();
+    }
+
+    input.addEventListener('input', () => {
+      confirm.disabled = input.value.trim() === '';
+      error.style.display = 'none';
+    });
+
+    cancel.onclick = () => {
+      modal.style.display = 'none';
+      currentCallback(false);
+    };
+
+    confirm.onclick = () => {
+      const pass = input.value.trim();
+      if (pass === '8322') {
+        modal.style.display = 'none';
+        currentCallback(true);
+      } else {
+        error.style.display = 'block';
+      }
+    };
   </script>
 </body>
 </html>
