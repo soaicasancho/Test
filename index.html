@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tool Chéo</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding-top: 70px;
+    }
+
+    .fixed-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: white;
+      z-index: 1000;
+      padding: 15px 20px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .top-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .section {
+      border: 1px solid #ddd;
+      padding: 2px;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+
+    .section-title {
+      font-weight: bold;
+      margin-bottom: 1px;
+      text-align: center;
+      cursor: pointer;
+      padding: 5px;
+      background-color: #eee;
+      border-radius: 6px;
+      transition: background-color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .section-title:hover {
+      background-color: #ddd;
+    }
+
+    .link-button {
+      width: 100%;
+      text-align: center;
+      border: none;
+      border-radius: 8px;
+      background-color: #1da1f2;
+      color: white;
+      font-size: 14px;
+      padding: 12px 2px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      margin-bottom: 12px;
+    }
+
+    .link-button:hover {
+      box-shadow: 0 0 12px rgba(29, 161, 242, 0.6), 0 0 24px rgba(29, 161, 242, 0.4);
+      transform: scale(1.01);
+    }
+
+    .link-button:active {
+      background-color: #0d8ddb;
+      transform: scale(0.96);
+      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .clicked {
+      background-color: gray !important;
+      color: #eee;
+      cursor: default;
+    }
+
+    .link-button:disabled {
+      cursor: not-allowed;
+    }
+
+    .link-container {
+      display: block;
+      transition: all 0.3s ease;
+    }
+
+    .collapsed {
+      display: none;
+    }
+
+    .toggle-icon {
+      font-size: 14px;
+    }
+
+    .bottom-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 4px;
+      padding: 10px 4px;
+    }
+
+    .top-section {
+      padding: 10px 4px;
+  }
+
+  </style>
+</head>
+<body>
+  <div class="fixed-header">Hãy Chọn Đúng Mục Cần Chéo</div>
+
+  <!-- Top Section: 3 hàng dọc - mỗi hàng 1 mục -->
+  <div class="top-section">
+    <div class="section">
+      <div class="section-title" onclick="toggleSection('linkCoc')">
+        <span class="toggle-icon" id="icon-linkCoc">+</span> Link Cóc 🐸
+      </div>
+      <div id="linkCoc" class="link-container collapsed"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title" onclick="toggleSection('linkTuyet')">
+        <span class="toggle-icon" id="icon-linkTuyet">+</span> Link Tuyết ❄
+      </div>
+      <div id="linkTuyet" class="link-container collapsed"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title" onclick="toggleSection('linkMochi')">
+        <span class="toggle-icon" id="icon-linkMochi">+</span> Link Mochi 🎂
+      </div>
+      <div id="linkMochi" class="link-container collapsed"></div>
+    </div>
+  </div>
+
+  <script>
+    const linkCoc = [
+      { url: "https://lite.tiktok.com/t/ZSh9vYu8c/", label: "Máy 16PRM", protected: true },
+      { url: "https://lite.tiktok.com/t/ZSh9vkeoL/", label: "Máy XS", protected: true },
+      { url: "https://lite.tiktok.com/t/ZSh97qHpD/", label: "Máy 7PL", protected: true  },
+      { url: "https://lite.tiktok.com/t/ZShP4dJbK/", label: "Máy 6SPL" }
+    ];
+
+    const linkTuyet = [
+      { url: "https://lite.tiktok.com/t/ZSrRn6Gx2/", label: "Máy 16PRM", protected: true },
+      { url: "https://lite.tiktok.com/t/ZSrRtdS5n/", label: "Máy XS", protected: true },
+      { url: "https://lite.tiktok.com/t/ZShxvepxY/", label: "Máy 6SPL" }
+    ];
+
+    const linkMochi = [
+      { url: "https://example.com/mochi1", label: "Máy XS", protected: true  },
+      { url: "https://example.com/mochi2", label: "Máy 16PRM", protected: true  }
+    ];
+
+
+    const clickedLinks = JSON.parse(localStorage.getItem('clickedLinks') || '{}');
+    const lastUpdated = localStorage.getItem('lastUpdated');
+    const today = new Date().toISOString().split('T')[0];
+
+    if (lastUpdated !== today) {
+      localStorage.removeItem('clickedLinks');
+      localStorage.setItem('lastUpdated', today);
+    }
+
+    function createButton(link, label, type, allowMultiple = false, isProtected = false) {
+      const btn = document.createElement('button');
+      btn.className = 'link-button';
+      const key = link + '_' + type;
+      const clickCount = clickedLinks[key + '_count'] || 0;
+
+      if (!allowMultiple && clickedLinks[key] === today) {
+        btn.textContent = `Đã bấm (${clickCount} lượt)`;
+        btn.classList.add('clicked');
+        btn.disabled = true;
+      } else {
+        btn.textContent = `${label} ${clickCount > 0 ? `(${clickCount} lượt)` : ''}`;
+      }
+
+      btn.onclick = () => {
+        if (isProtected) {
+          const pass = prompt("Bạn không có quyền truy cập tính năng này\nNhập Mật Khẩu để tiếp tục:");
+          if (pass !== "8322") {
+            alert("Sai mật khẩu!");
+            return;
+          }
+        }
+        window.open(link, '_blank');
+        clickedLinks[key] = today;
+        clickedLinks[key + '_count'] = clickCount + 1;
+        localStorage.setItem('clickedLinks', JSON.stringify(clickedLinks));
+        if (!allowMultiple) {
+          btn.textContent = `Đã bấm (${clickedLinks[key + '_count']} lượt)`;
+          btn.classList.add('clicked');
+          btn.disabled = true;
+        } else {
+          btn.textContent = `${label} (${clickedLinks[key + '_count']} lượt)`;
+        }
+      };
+
+      return btn;
+    }
+
+    function renderLinks(containerId, links, type, prefix, allowMultiple = false) {
+      const container = document.getElementById(containerId);
+      links.forEach((link, i) => {
+        const btn = createButton(
+          link.url || link,
+          link.label || `${prefix} ${i + 1}`,
+          type,
+          allowMultiple,
+          link.protected || false
+        );
+        container.appendChild(btn);
+      });
+    }
+
+    function toggleSection(id) {
+      const container = document.getElementById(id);
+      const icon = document.getElementById('icon-' + id);
+      container.classList.toggle('collapsed');
+      icon.textContent = container.classList.contains('collapsed') ? '+' : '−';
+    }
+
+    renderLinks('linkCoc', linkCoc, 'coc', 'Cóc', true);
+    renderLinks('linkTuyet', linkTuyet, 'tuyet', 'Tuyết', true);
+    renderLinks('linkMochi', linkMochi, 'mochi', 'Mochi', true);
+  </script>
+</body>
+</html>
