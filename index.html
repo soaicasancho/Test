@@ -1684,27 +1684,6 @@
     }
   })();
 
-(function () {
-  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-  const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
-  const iosModalKey = 'iosInstallModalShown';
-
-  if (enable_ios_modal && isIOS && !isInStandaloneMode && !localStorage.getItem(iosModalKey)) {
-    const modal = document.getElementById('iosInstallModal');
-    if (modal) {
-      modal.style.display = 'flex';
-      document.body.classList.add('no-scroll');
-
-      const okBtn = document.getElementById('ios-ok-btn');
-      okBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-        document.body.classList.remove('no-scroll');
-        localStorage.setItem(iosModalKey, 'yes');
-      });
-    }
-  }
-})();
-
   document.getElementById('modal-title').textContent = t["modal-title"];
   document.getElementById('featureModal-ok').textContent = t["modal-ok-confirm"];
   for (let i = 1; i <= 13; i++) {
