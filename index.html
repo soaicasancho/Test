@@ -1625,7 +1625,7 @@
   }
 
   // ✅ Hiện modal mỗi lần nếu là Safari trên iOS và chưa cài shortcut
-  if (isIOS() && !isInStandaloneMode()) {
+  if (!DISABLE_IOS_MODAL && isIOS() && !isInStandaloneMode()) {
     window.addEventListener('DOMContentLoaded', () => {
       const modal = document.getElementById('iosInstallModal');
       const okBtn = document.getElementById('ios-ok-btn');
