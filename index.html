@@ -1250,27 +1250,27 @@
 
 
     // ✅ Modal thông báo tính năng mới – chỉ hiển thị 5 lần
-    (function() {
-      const modalKey = 'featureModalShownCount';
-      let count = parseInt(localStorage.getItem(modalKey) || '0', 10);
+(function() {
+  const modalKey = 'featureModalShownCount';
+  let count = parseInt(localStorage.getItem(modalKey) || '0', 10);
 
-      if (count < 1) {
-        const modal = document.getElementById('featureModal');
-        const okBtn = document.getElementById('featureModal-ok');
+  if (count < 1) {
+    const modal = document.getElementById('featureModal');
+    const okBtn = document.getElementById('featureModal-ok');
 
-        modal.style.display = 'flex';
-        document.body.classList.add('no-scroll');
+    modal.style.display = 'flex';
+    document.body.classList.add('no-scroll');
 
-        okBtn.addEventListener('click', () => {
-          modal.style.display = 'none';
-          document.body.classList.remove('no-scroll');
-          localStorage.setItem(modalKey, (count +1).toString());
+    okBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
+      document.body.classList.remove('no-scroll');
+      localStorage.setItem(modalKey, (count +1).toString());
 
-          // ✅ ĐÃ ĐÓNG modal tính năng mới → gọi modal iOS
-          triggerIOSModalIfNeeded();
-        });
-      }
-    })();
+      triggerIOSModalIfNeeded(); // ✅ Chỉ gọi sau khi ấn "Đã hiểu"
+    });
+  } 
+})();
+
 
     // ✅ Reset vô hiệu hóa Pass mở link
     (function() {
