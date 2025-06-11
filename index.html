@@ -631,11 +631,6 @@
       <p id="ios-line2">2. Chọn <strong>"Thêm vào Màn hình chính"</strong>.</p>
       <p id="ios-line3">3. Nhấn <strong>"Thêm"</strong> để hoàn tất.</p>
 
-      <label style="display: block; margin-top: 15px; text-align: left; font-size: 14px;">
-        <input type="checkbox" id="ios-dont-show-again" style="margin-right: 6px;">
-        <span id="ios-checkbox-label">Không hiển thị lại lần sau</span>
-      </label>
-
       <div class="buttons" style="margin-top: 10px;">
         <button onclick="closeIosModal()" id="ios-ok-btn">Đã hiểu</button>
       </div>
@@ -1457,8 +1452,7 @@
     "ios-line1": "1. Nhấn biểu tượng <strong>Chia sẻ</strong> (hình vuông có mũi tên đi lên) ở dưới cùng Safari.",
     "ios-line2": "2. Chọn <strong>\"Thêm vào Màn hình chính\"</strong>.",
     "ios-line3": "3. Nhấn <strong>\"Thêm\"</strong> để hoàn tất.",
-    "ios-ok-btn": "Đã hiểu",
-    "ios-checkbox-label": "Không hiển thị lại"
+    "ios-ok-btn": "Đã hiểu"
   },
   en: {
     title: "60-Minute Videos by Dang Giap",
@@ -1502,8 +1496,7 @@
     "ios-line1": "1. Tap the <strong>Share</strong> icon (square with arrow) at the bottom of Safari.",
     "ios-line2": "2. Choose <strong>\"Add to Home Screen\"</strong>.",
     "ios-line3": "3. Tap <strong>\"Add\"</strong> to confirm.",
-    "ios-ok-btn": "Got it",
-    "ios-checkbox-label": "Don't show again"
+    "ios-ok-btn": "Got it"
   },
   ja: {
     title: "Đăng Giápの60分無音動画",
@@ -1547,8 +1540,7 @@
     "ios-line1": "1. Safariの下部にある<strong>共有</strong>アイコン（上向きの矢印付きの四角）をタップ。",
     "ios-line2": "2. <strong>「ホーム画面に追加」</strong>を選択。",
     "ios-line3": "3. <strong>「追加」</strong>をタップして完了。",
-    "ios-ok-btn": "了解",
-    "ios-checkbox-label": "次回から表示しない"
+    "ios-ok-btn": "了解"
     }
   };
   const t = translations[lang];
@@ -1615,7 +1607,6 @@
   document.getElementById('ios-line2').innerHTML = t["ios-line2"];
   document.getElementById('ios-line3').innerHTML = t["ios-line3"];
   document.getElementById('ios-ok-btn').textContent = t["ios-ok-btn"];
-  document.getElementById('ios-checkbox-label').textContent = t["ios-checkbox-label"];
   }
 
   // ✅Hiển thị nút "Thêm vào Màn hình chính" nếu là iOS Safari
@@ -1626,21 +1617,17 @@
     return window.navigator.standalone === true;
   }
   function closeIosModal() {
-    const dontShowAgain = document.getElementById('ios-dont-show-again').checked;
-    if (dontShowAgain) {
-      localStorage.setItem('iosModalDontShow', '1');
-    }
     document.getElementById('iosInstallModal').style.display = 'none';
     document.body.classList.remove('no-scroll');
   }
 
-  // ✅ Tự động hiện modal nếu là iOS, chưa cài, và chưa tắt vĩnh viễn
-  if (isIOS() && !isInStandaloneMode() && !localStorage.getItem('iosModalDontShow')) {
+  // ✅ Hiện modal mỗi lần nếu là Safari trên iOS và chưa cài shortcut
+  if (isIOS() && !isInStandaloneMode()) {
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('iosInstallModal').style.display = 'flex';
       document.body.classList.add('no-scroll');
     });
-   }
+  }
 
   document.getElementById('modal-title').textContent = t["modal-title"];
   document.getElementById('featureModal-ok').textContent = t["modal-ok-confirm"];
