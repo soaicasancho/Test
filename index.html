@@ -1612,24 +1612,30 @@
   document.getElementById('ios-ok-btn').textContent = t["ios-ok-btn"];
   }
 
-  // ✅ Modal thêm phím tắt iOS
+  // ✅ Modal thêm phím tắt iOS - Hiện tối đa 2 lần
   (function () {
     const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
     const iosModalKey = 'iosInstallModalShown';
+    const enable_ios_modal = true;
 
-    if (enable_ios_modal && isIOS && !isInStandaloneMode && !localStorage.getItem(iosModalKey)) {
-      const modal = document.getElementById('iosInstallModal');
+    // Lấy số lần đã hiển thị modal, mặc định là 0
+    let shownCount = parseInt(localStorage.getItem(iosModalKey) || '0', 10);
+
+    if (enable_ios_modal && isIOS && !isInStandaloneMode && shownCount < 2) {
+     const modal = document.getElementById('iosInstallModal');
       if (modal) {
         modal.style.display = 'flex';
         document.body.classList.add('no-scroll');
 
         const okBtn = document.getElementById('ios-ok-btn');
-        okBtn.addEventListener('click', () => {
-          modal.style.display = 'none';
-          document.body.classList.remove('no-scroll');
-          localStorage.setItem(iosModalKey, 'yes');
-        });
+        if (okBtn) {
+          okBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.body.classList.remove('no-scroll');
+            localStorage.setItem(iosModalKey, (shownCount + 1).toString()); // tăng số lần lên 1
+          });
+        }
       }
     }
   })();
