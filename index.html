@@ -655,7 +655,7 @@
     const enableSumo = false;
 
     // ✅ Đổi thành true/false để hiện/ẩn lại Mở Kho Báu 💎
-    const enableKhoBau = false;
+    const enableKhoBau = true;
 
     // ✅ Đổi thành true/false để hiện/ẩn lại Link Giới Thiệu 📢
     const enableGioiThieu = true;
@@ -690,7 +690,7 @@
     ];
 
     const linkKhoBau = [
-      { url: "", label: "🔓", protected: true }
+      { url: "https://lite.tiktok.com/t/ZShKhA1Lb/", label: "🔓", copyOnly: true }
     ];
 
     const linkGioiThieu = [
@@ -928,10 +928,24 @@
       }
 
       btn.onclick = () => {
-        if (isProtected) {
+        if (link.copyOnly) {
+          navigator.clipboard.writeText(link.url)
+            .then(() => {
+              const oldText = btn.textContent;
+              btn.textContent = "Đã sao chép liên kết";
+              btn.disabled = true;
+              setTimeout(() => {
+                btn.textContent = oldText;
+                btn.disabled = false;
+              }, 2000);
+            })
+            .catch(() => {
+              alert("❌ Sao chép thất bại. Dùng trình duyệt khác và thử lại");
+            });
+        } else if (isProtected) {
           showPasswordModal(link, label, key, allowMultiple, clickCount, btn);
         } else {
-          openLinkAndSave(link, label, key, allowMultiple, clickCount, btn);
+          openLinkAndSave(link.url, label, key, allowMultiple, clickCount, btn);
         }
       };
       return btn;
@@ -1047,7 +1061,7 @@
 
         document.body.removeChild(overlay);
         document.body.classList.remove('no-scroll');
-        openLinkAndSave(link, label, key, allowMultiple, clickCount, btn);
+        openLinkAndSave(link.url, label, key, allowMultiple, clickCount, btn);
       });
     }
 
@@ -1057,7 +1071,7 @@
       links.forEach((link, i) => {
         if (link.hidden) return; // 👈 bỏ qua nếu có hidden: true
         const btn = createButton(
-          link.url || link,
+          link,
           link.label || `${prefix} ${i + 1}`,
           type,
           allowMultiple,
@@ -1634,9 +1648,6 @@
     }
   })();
 
-
-
-
 (function () {
   const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
   const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
@@ -1658,9 +1669,6 @@
   }
 })();
 
-
-
-
   document.getElementById('modal-title').textContent = t["modal-title"];
   document.getElementById('featureModal-ok').textContent = t["modal-ok-confirm"];
   for (let i = 1; i <= 13; i++) {
@@ -1679,7 +1687,7 @@
       });
   }
 
-// ✅ Modal hướng dẫn iOS – chỉ hiển thị 2 lần
+// ✅ Modal hướng dẫn iOS – chỉ hiển thị 1 lần
 (function () {
   if (!enable_ios_modal) return;
 
@@ -1688,7 +1696,7 @@
   const iosModalKey = 'iosInstallModalShownCount';
   let count = parseInt(localStorage.getItem(iosModalKey) || '0', 10);
 
-  if (isIOS && !isInStandaloneMode && count < 2) {
+  if (isIOS && !isInStandaloneMode && count < 1) {
     const modal = document.getElementById('iosInstallModal');
     if (modal) {
       modal.style.display = 'flex';
