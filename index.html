@@ -632,7 +632,7 @@
       <p id="ios-line3">3. Nhấn <strong>"Thêm"</strong> để hoàn tất.</p>
 
       <div class="buttons" style="margin-top: 10px;">
-        <button onclick="closeIosModal()" id="ios-ok-btn">Đã hiểu</button>
+        <button id="ios-ok-btn">Đã hiểu</button>
       </div>
     </div>
   </div>
@@ -1624,8 +1624,20 @@
   // ✅ Hiện modal mỗi lần nếu là Safari trên iOS và chưa cài shortcut
   if (isIOS() && !isInStandaloneMode()) {
     window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('iosInstallModal').style.display = 'flex';
-      document.body.classList.add('no-scroll');
+      const modal = document.getElementById('iosInstallModal');
+      const okBtn = document.getElementById('ios-ok-btn');
+
+      if (modal) {
+        modal.style.display = 'flex';
+        document.body.classList.add('no-scroll');
+      }
+
+      if (okBtn) {
+        okBtn.addEventListener('click', () => {
+          modal.style.display = 'none';
+          document.body.classList.remove('no-scroll');
+        });
+      }
     });
   }
 
