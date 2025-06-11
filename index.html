@@ -630,7 +630,13 @@
       <p id="ios-line1">1. Nhấn biểu tượng <strong>Chia sẻ</strong> (hình vuông có mũi tên đi lên) ở dưới cùng Safari.</p>
       <p id="ios-line2">2. Chọn <strong>"Thêm vào Màn hình chính"</strong>.</p>
       <p id="ios-line3">3. Nhấn <strong>"Thêm"</strong> để hoàn tất.</p>
-      <div class="buttons">
+
+      <label style="display: block; margin-top: 15px; text-align: left; font-size: 14px;">
+        <input type="checkbox" id="ios-dont-show-again" style="margin-right: 6px;">
+        <span id="ios-checkbox-label">Không hiển thị lại lần sau</span>
+      </label>
+
+      <div class="buttons" style="margin-top: 10px;">
         <button onclick="closeIosModal()" id="ios-ok-btn">Đã hiểu</button>
       </div>
     </div>
@@ -1452,7 +1458,7 @@
     "ios-line2": "2. Chọn <strong>\"Thêm vào Màn hình chính\"</strong>.",
     "ios-line3": "3. Nhấn <strong>\"Thêm\"</strong> để hoàn tất.",
     "ios-ok-btn": "Đã hiểu",
-    "ios-add-btn": "➕ Thêm vào Màn hình Chính"
+    "ios-checkbox-label": "Không hiển thị lại"
   },
   en: {
     title: "60-Minute Videos by Dang Giap",
@@ -1497,7 +1503,7 @@
     "ios-line2": "2. Choose <strong>\"Add to Home Screen\"</strong>.",
     "ios-line3": "3. Tap <strong>\"Add\"</strong> to confirm.",
     "ios-ok-btn": "Got it",
-    "ios-add-btn": "➕ Add to Home Screen"
+    "ios-checkbox-label": "Don't show again"
   },
   ja: {
     title: "Đăng Giápの60分無音動画",
@@ -1542,7 +1548,7 @@
     "ios-line2": "2. <strong>「ホーム画面に追加」</strong>を選択。",
     "ios-line3": "3. <strong>「追加」</strong>をタップして完了。",
     "ios-ok-btn": "了解",
-    "ios-add-btn": "➕ ホーム画面に追加"
+    "ios-checkbox-label": "次回から表示しない"
     }
   };
   const t = translations[lang];
@@ -1604,101 +1610,37 @@
   document.getElementById('closeContactBtn').textContent = t["contact-close"];
 
   if (document.getElementById('ios-modal-title')) {
-    document.getElementById('ios-modal-title').textContent = t["ios-modal-title"];
-    document.getElementById('ios-line1').innerHTML = t["ios-line1"];
-    document.getElementById('ios-line2').innerHTML = t["ios-line2"];
-    document.getElementById('ios-line3').innerHTML = t["ios-line3"];
-    document.getElementById('ios-ok-btn').textContent = t["ios-ok-btn"];
-  }
-  if (document.getElementById('iosShortcutBtn')) {
-    document.getElementById('iosShortcutBtn').textContent = t["ios-add-btn"];
+  document.getElementById('ios-modal-title').textContent = t["ios-modal-title"];
+  document.getElementById('ios-line1').innerHTML = t["ios-line1"];
+  document.getElementById('ios-line2').innerHTML = t["ios-line2"];
+  document.getElementById('ios-line3').innerHTML = t["ios-line3"];
+  document.getElementById('ios-ok-btn').textContent = t["ios-ok-btn"];
+  document.getElementById('ios-checkbox-label').textContent = t["ios-checkbox-label"];
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // ✅Hiển thị nút "Thêm vào Màn hình chính" nếu là iOS Safari
-    function isIOS() {
-      return /iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase());
+  // ✅Hiển thị nút "Thêm vào Màn hình chính" nếu là iOS Safari
+  function isIOS() {
+    return /iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase());
+  }
+  function isInStandaloneMode() {
+    return window.navigator.standalone === true;
+  }
+  function closeIosModal() {
+    const dontShowAgain = document.getElementById('ios-dont-show-again').checked;
+    if (dontShowAgain) {
+      localStorage.setItem('iosModalDontShow', '1');
     }
-    function isInStandaloneMode() {
-      return window.navigator.standalone === true;
-    }
-    function closeIosModal() {
-      document.getElementById('iosInstallModal').style.display = 'none';
-      document.body.classList.remove('no-scroll');
-    }
+    document.getElementById('iosInstallModal').style.display = 'none';
+    document.body.classList.remove('no-scroll');
+  }
 
-    if (isIOS() && !isInStandaloneMode()) {
-      const shortcutBtn = document.createElement('button');
-      shortcutBtn.id = 'iosShortcutBtn';
-      shortcutBtn.textContent = translations[currentLanguage]["ios-add-btn"];
-      shortcutBtn.style = `
-        position: fixed;
-        bottom: 80px;
-        left: 20px;
-        right: 20px;
-        padding: 14px;
-        font-size: 16px;
-        background-color: #1da1f2;
-        color: white;
-        border: none;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        z-index: 9999;
-      `;
-
-      shortcutBtn.onclick = function () {
-        document.getElementById('iosInstallModal').style.display = 'flex';
-        document.body.classList.add('no-scroll');
-      };
-
-      document.body.appendChild(shortcutBtn);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  // ✅ Tự động hiện modal nếu là iOS, chưa cài, và chưa tắt vĩnh viễn
+  if (isIOS() && !isInStandaloneMode() && !localStorage.getItem('iosModalDontShow')) {
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('iosInstallModal').style.display = 'flex';
+      document.body.classList.add('no-scroll');
+    });
+   }
 
   document.getElementById('modal-title').textContent = t["modal-title"];
   document.getElementById('featureModal-ok').textContent = t["modal-ok-confirm"];
