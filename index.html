@@ -1222,6 +1222,30 @@
       location.reload();
     }
 
+    // ✅ Modal thêm phím tắt – chỉ hiển thị 1 lần
+    function triggerIOSModalIfNeeded() {
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
+      const iosModalKey = 'iosInstallModalShownCount';
+      let count = parseInt(localStorage.getItem(iosModalKey) || '0', 10);
+
+      if (enable_ios_modal && isIOS && !isInStandaloneMode && count < 1) {
+        const modal = document.getElementById('iosInstallModal');
+        if (modal) {
+          modal.style.display = 'flex';
+          document.body.classList.add('no-scroll');
+
+          const okBtn = document.getElementById('ios-ok-btn');
+          okBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.body.classList.remove('no-scroll');
+            localStorage.setItem(iosModalKey, (count + 1).toString());
+          });
+        }
+      }
+    }
+
+
     // ✅ Modal thông báo tính năng mới – chỉ hiển thị 5 lần
     (function() {
       const modalKey = 'featureModalShownCount';
@@ -1238,7 +1262,13 @@
           modal.style.display = 'none';
           document.body.classList.remove('no-scroll');
           localStorage.setItem(modalKey, (count +1).toString());
+
+          // ✅ ĐÃ ĐÓNG modal tính năng mới → gọi modal iOS
+          triggerIOSModalIfNeeded();
         });
+      } else {
+        // ✅ KHÔNG hiển thị modal tính năng mới → vẫn cần kiểm tra iOS
+        triggerIOSModalIfNeeded();  // <<< THÊM DÒNG NÀY VÀO ĐÂY
       }
     })();
 
@@ -1686,31 +1716,6 @@
         console.log("❌ Service Worker registration failed:", error);
       });
   }
-
-// ✅ Modal hướng dẫn iOS – chỉ hiển thị 1 lần
-(function () {
-  if (!enable_ios_modal) return;
-
-  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-  const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
-  const iosModalKey = 'iosInstallModalShownCount';
-  let count = parseInt(localStorage.getItem(iosModalKey) || '0', 10);
-
-  if (isIOS && !isInStandaloneMode && count < 1) {
-    const modal = document.getElementById('iosInstallModal');
-    if (modal) {
-      modal.style.display = 'flex';
-      document.body.classList.add('no-scroll');
-
-      const okBtn = document.getElementById('ios-ok-btn');
-      okBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-        document.body.classList.remove('no-scroll');
-        localStorage.setItem(iosModalKey, (count + 1).toString());
-      });
-    }
-  }
-})();
 
   </script>
 </body>
