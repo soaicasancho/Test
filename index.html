@@ -660,9 +660,6 @@
     // ✅ Đổi thành true/false để hiện/ẩn lại Link Giới Thiệu 📢
     const enableGioiThieu = true;
 
-    // ✅ Đổi thành true/false để hiện/ẩn lại hướng dẫn cài phím tắt
-    const enable_ios_modal = false; 
-
     // ✅ Dữ liệu link cụ thể. protected: true khóa pass, highlight: true nhấp nháy chữ trong nút, hidden: true ẩn nút.
     const linkCocLite = [
       { url: "https://lite.tiktok.com/t/ZSh3cudbp/", label: "GL 4", hidden: true },
@@ -1623,6 +1620,9 @@
     document.getElementById('iosInstallModal').style.display = 'none';
     document.body.classList.remove('no-scroll');
   }
+  
+  // ✅ Đổi thành true/false để hiện/ẩn lại hướng dẫn cài phím tắt
+  const enable_ios_modal = false; 
 
   // ✅ Hiện modal mỗi lần nếu là Safari trên iOS và chưa cài shortcut
   if (!enable_ios_modal && isIOS() && !isInStandaloneMode()) {
