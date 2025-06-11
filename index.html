@@ -1371,85 +1371,6 @@
       isPulling = false;
     });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // ✅Hiển thị nút "Thêm vào Màn hình chính" nếu là iOS Safari
-    function isIOS() {
-      return /iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase());
-    }
-    function isInStandaloneMode() {
-      return window.navigator.standalone === true;
-    }
-    function closeIosModal() {
-      document.getElementById('iosInstallModal').style.display = 'none';
-      document.body.classList.remove('no-scroll');
-    }
-
-    if (isIOS() && !isInStandaloneMode()) {
-      const shortcutBtn = document.createElement('button');
-      shortcutBtn.id = 'iosShortcutBtn';
-      shortcutBtn.textContent = translations[currentLanguage]["ios-add-btn"];
-      shortcutBtn.style = `
-        position: fixed;
-        bottom: 80px;
-        left: 20px;
-        right: 20px;
-        padding: 14px;
-        font-size: 16px;
-        background-color: #1da1f2;
-        color: white;
-        border: none;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        z-index: 9999;
-      `;
-
-      shortcutBtn.onclick = function () {
-        document.getElementById('iosInstallModal').style.display = 'flex';
-        document.body.classList.add('no-scroll');
-      };
-
-      document.body.appendChild(shortcutBtn);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
     // ✅ Hàm thực hiện làm mới lại toàn bộ app
     function refreshApp() {
       location.reload();
@@ -1692,6 +1613,92 @@
   if (document.getElementById('iosShortcutBtn')) {
     document.getElementById('iosShortcutBtn').textContent = t["ios-add-btn"];
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // ✅Hiển thị nút "Thêm vào Màn hình chính" nếu là iOS Safari
+    function isIOS() {
+      return /iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase());
+    }
+    function isInStandaloneMode() {
+      return window.navigator.standalone === true;
+    }
+    function closeIosModal() {
+      document.getElementById('iosInstallModal').style.display = 'none';
+      document.body.classList.remove('no-scroll');
+    }
+
+    if (isIOS() && !isInStandaloneMode()) {
+      const shortcutBtn = document.createElement('button');
+      shortcutBtn.id = 'iosShortcutBtn';
+      shortcutBtn.textContent = translations[currentLanguage]["ios-add-btn"];
+      shortcutBtn.style = `
+        position: fixed;
+        bottom: 80px;
+        left: 20px;
+        right: 20px;
+        padding: 14px;
+        font-size: 16px;
+        background-color: #1da1f2;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        z-index: 9999;
+      `;
+
+      shortcutBtn.onclick = function () {
+        document.getElementById('iosInstallModal').style.display = 'flex';
+        document.body.classList.add('no-scroll');
+      };
+
+      document.body.appendChild(shortcutBtn);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   document.getElementById('modal-title').textContent = t["modal-title"];
   document.getElementById('featureModal-ok').textContent = t["modal-ok-confirm"];
