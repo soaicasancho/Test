@@ -660,6 +660,9 @@
     // ✅ Đổi thành true/false để hiện/ẩn lại Link Giới Thiệu 📢
     const enableGioiThieu = true;
 
+    // ✅ Đổi thành true/false để hiện/ẩn lại hướng dẫn cài phím tắt
+    const enable_ios_modal = false; 
+
     // ✅ Dữ liệu link cụ thể. protected: true khóa pass, highlight: true nhấp nháy chữ trong nút, hidden: true ẩn nút.
     const linkCocLite = [
       { url: "https://lite.tiktok.com/t/ZSh3cudbp/", label: "GL 4", hidden: true },
@@ -1609,40 +1612,28 @@
   document.getElementById('ios-ok-btn').textContent = t["ios-ok-btn"];
   }
 
-  // ✅Hiển thị nút "Thêm vào Màn hình chính" nếu là iOS Safari
-  function isIOS() {
-    return /iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase());
-  }
-  function isInStandaloneMode() {
-    return window.navigator.standalone === true;
-  }
-  function closeIosModal() {
-    document.getElementById('iosInstallModal').style.display = 'none';
-    document.body.classList.remove('no-scroll');
-  }
-  
-  // ✅ Đổi thành true/false để hiện/ẩn lại hướng dẫn cài phím tắt
-  const enable_ios_modal = false; 
+  // ✅ Modal thêm phím tắt iOS
+  (function () {
+    const enable_ios_modal = false; // Đảm bảo bạn đã định nghĩa biến này ở trên
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
+    const iosModalKey = 'iosInstallModalShown';
 
-  // ✅ Hiện modal mỗi lần nếu là Safari trên iOS và chưa cài shortcut
-  if (!enable_ios_modal && isIOS() && !isInStandaloneMode()) {
-    window.addEventListener('DOMContentLoaded', () => {
+    if (enable_ios_modal && isIOS && !isInStandaloneMode && !localStorage.getItem(iosModalKey)) {
       const modal = document.getElementById('iosInstallModal');
-      const okBtn = document.getElementById('ios-ok-btn');
-
       if (modal) {
         modal.style.display = 'flex';
         document.body.classList.add('no-scroll');
-      }
 
-      if (okBtn) {
+        const okBtn = document.getElementById('ios-ok-btn');
         okBtn.addEventListener('click', () => {
           modal.style.display = 'none';
           document.body.classList.remove('no-scroll');
+          localStorage.setItem(iosModalKey, 'yes');
         });
       }
-    });
-  }
+    }
+  })();
 
   document.getElementById('modal-title').textContent = t["modal-title"];
   document.getElementById('featureModal-ok').textContent = t["modal-ok-confirm"];
