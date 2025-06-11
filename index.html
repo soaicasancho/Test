@@ -661,7 +661,7 @@
     const enableGioiThieu = true;
 
     // ✅ Đổi thành true/false để hiện/ẩn lại hướng dẫn cài phím tắt
-    const DISABLE_IOS_MODAL = false; 
+    const enable_ios_modal = false; 
 
     // ✅ Dữ liệu link cụ thể. protected: true khóa pass, highlight: true nhấp nháy chữ trong nút, hidden: true ẩn nút.
     const linkCocLite = [
@@ -1625,7 +1625,7 @@
   }
 
   // ✅ Hiện modal mỗi lần nếu là Safari trên iOS và chưa cài shortcut
-  if (!DISABLE_IOS_MODAL && isIOS() && !isInStandaloneMode()) {
+  if (!enable_ios_modal && isIOS() && !isInStandaloneMode()) {
     window.addEventListener('DOMContentLoaded', () => {
       const modal = document.getElementById('iosInstallModal');
       const okBtn = document.getElementById('ios-ok-btn');
