@@ -637,6 +637,9 @@
     </div>
   </div>
 
+  <!-- ✅ Văn bản dịch cho trạng thái đã sao chép -->
+  <span id="copied-success-text" style="display: none;">Đã sao chép liên kết</span>
+
   <script>
 
     // ✅ Chỉnh số ngày bị khóa sau 5 lần nhập pass sai
@@ -932,7 +935,7 @@
           navigator.clipboard.writeText(link.url)
             .then(() => {
               const oldText = btn.textContent;
-              btn.textContent = "Đã sao chép liên kết";
+              btn.textContent = document.getElementById('copied-success-text').textContent;
               btn.disabled = true;
               setTimeout(() => {
                 btn.textContent = oldText;
@@ -1499,7 +1502,8 @@
     "ios-line1": "1. Nhấn biểu tượng <strong>Chia sẻ</strong> (hình vuông có mũi tên đi lên) ở dưới cùng Safari.",
     "ios-line2": "2. Chọn <strong>\"Thêm vào Màn hình chính\"</strong>.",
     "ios-line3": "3. Nhấn <strong>\"Thêm\"</strong> để hoàn tất.",
-    "ios-ok-btn": "Đã hiểu"
+    "ios-ok-btn": "Đã hiểu",
+    "copied-success-text": "Đã sao chép liên kết"
   },
   en: {
     title: "60-Minute Videos by Dang Giap",
@@ -1543,7 +1547,8 @@
     "ios-line1": "1. Tap the <strong>Share</strong> icon (square with arrow) at the bottom of Safari.",
     "ios-line2": "2. Choose <strong>\"Add to Home Screen\"</strong>.",
     "ios-line3": "3. Tap <strong>\"Add\"</strong> to confirm.",
-    "ios-ok-btn": "Got it"
+    "ios-ok-btn": "Got it",
+    "copied-success-text": "Link copied successfully"
   },
   ja: {
     title: "Đăng Giápの60分無音動画",
@@ -1587,7 +1592,8 @@
     "ios-line1": "1. Safariの下部にある<strong>共有</strong>アイコン（上向きの矢印付きの四角）をタップ。",
     "ios-line2": "2. <strong>「ホーム画面に追加」</strong>を選択。",
     "ios-line3": "3. <strong>「追加」</strong>をタップして完了。",
-    "ios-ok-btn": "了解"
+    "ios-ok-btn": "了解",
+    "copied-success-text": "リンクをコピーしました"
     }
   };
   const t = translations[lang];
@@ -1655,6 +1661,9 @@
   document.getElementById('ios-line3').innerHTML = t["ios-line3"];
   document.getElementById('ios-ok-btn').textContent = t["ios-ok-btn"];
   }
+
+  document.getElementById('info1').textContent = t["info1"];
+  document.getElementById('copied-success-text').textContent = t["copied-success-text"];
 
   // ✅ Modal thêm phím tắt iOS
   (function () {
