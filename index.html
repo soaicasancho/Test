@@ -677,7 +677,7 @@
     const enableCoc = true;
 
     // ✅ Đổi thành true/false để hiện/ẩn lại Link Tuyết ❄
-    const enableTuyet = false;
+    const enableTuyet = true;
 
     // ✅ Đổi thành true/false để hiện/ẩn lại Link Táo 🍎
     const enableTao = false;
@@ -705,23 +705,24 @@
 
     // ✅ Dữ liệu link cụ thể. protected: true khóa pass, highlight: true nhấp nháy chữ trong nút, hidden: true ẩn nút.
     const linkCocLite = [
-        {url: "https://lite.tiktok.com/t/ZSSKCFG48/", label: "16PRM"},
-        {url: "https://lite.tiktok.com/t/ZSh33xQVq/", label: "GL 5", hidden: true},
-        {url: "https://lite.tiktok.com/t/ZSh33Yjob/", label: "GL 6"},
-        {url: "https://lite.tiktok.com/t/ZShcngr3k/", label: "GL 7"}
+        {url: "https://lite.tiktok.com/t/ZSSKCFG48/", label: "16PRM", hidden: true},
+        {url: "https://lite.tiktok.com/t/ZSA8naWsk/", label: "GL 5"},
+        {url: "https://lite.tiktok.com/t/ZSh33Yjob/", label: "GL 6", hidden: true},
+        {url: "https://lite.tiktok.com/t/ZShcngr3k/", label: "GL 7", hidden: true},
+        {url: "https://lite.tiktok.com/t/ZSHGhf62C6TV6-fmAjv/", label: "Sony 6"}
     ];
 
     const linkCocRegular = [
-        {url: "https://vt.tiktok.com/ZSkSN7puy/", label: "16PRM"},
-        {url: "https://vt.tiktok.com/ZSSSksXud/", label: "XS"},
-        {url: "https://vt.tiktok.com/ZSkkegXK9/", label: "MRT 005"},
+        {url: "https://vt.tiktok.com/ZSkSN7puy/", label: "16PRM", hidden: true},
+        {url: "https://vt.tiktok.com/ZSSSksXud/", label: "XS", hidden: true},
+        {url: "https://vt.tiktok.com/ZSkkegXK9/", label: "MRT 005", hidden: true},
         {url: "https://vt.tiktok.com/ZSkSUToee/", label: "Sony 2", hidden: true}
     ];
 
     const linkTuyet = [
         {url: "https://lite.tiktok.com/t/ZSSWfoNBD/", label: "Bấm ở đây GL6", highlight: true},
         {url: "", label: "🔒", protected: true},
-        {url: "https://lite.tiktok.com/t/ZSSWP6hgf/", label: "🔒 GL7"},
+        {url: "https://lite.tiktok.com/t/ZSSWP6hgf/", label: "🔒 GL7", protected: true},
         {url: "", label: "🔒", protected: true, hidden: true},
         {url: "", label: "🔒", hidden: true}
     ];
